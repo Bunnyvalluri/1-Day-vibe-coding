@@ -1,18 +1,20 @@
 {
-  "name": "church-event-system",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "install:all": "npm install --prefix backend && npm install --prefix frontend",
-    "dev:backend": "npm --prefix backend run dev",
-    "dev:frontend": "npm --prefix frontend run dev",
-    "dev": "npx concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\""
-  },
-  "devDependencies": {
-    "concurrently": "^8.2.2",
-    "@netlify/functions": "^2.8.1"
-  },
-  "dependencies": {
-    "serverless-http": "^3.2.0"
-  }
+    "name": "church-event-system",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+          "install:all": "npm install --prefix backend && npm install --prefix frontend",
+          "dev:backend": "npm --prefix backend run dev",
+          "dev:frontend": "npm --prefix frontend run dev",
+          "dev": "npx concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\""
+    },
+    "devDependencies": {
+          "concurrently": "^8.2.2",
+          "@netlify/functions": "^2.8.1",
+          "prisma": "^5.12.1"
+    },
+    "dependencies": {
+          "serverless-http": "^3.2.0",
+          "@prisma/client": "^5.12.1"
+    }
 }
