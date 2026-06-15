@@ -200,3 +200,11 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateY(-6px) scale(1.01);
 }
 
+/* Background grid pattern */
+.bg-grid-pattern {
+  background-size: 30px 30px;
+  background-image: 
+    linear-gradient(to right, rgba(15, 23, 42, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.025) 1px, transparent 1px);
+}
+
