@@ -1,0 +1,99 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  fullName      String
+  email         String         @unique
+  phone         String?
+  password      String
+  role          String         @default("MEMBER") // MEMBER, MINISTRY_LEADER, ADMIN, SUPER_ADMIN
+  memberId      String?        @unique
+  ministryId    String?
+  ministry      Ministry?      @relation("MinistryMembers", fields: [ministryId], references: [id])
+  ledMinistries Ministry[]     @relation("MinistryLeader")
+  registrations Registration[]
+  attendance    Attendance[]
+  notifications Notification[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Ministry {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  leaderId    String?
+  leader      User?    @relation("MinistryLeader", fields: [leaderId], references: [id])
+  status      String   @default("ACTIVE") // ACTIVE, INACTIVE
+  members     User[]   @relation("MinistryMembers")
+  events      Event[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Event {
+  id                   String         @id @default(uuid())
+  title                String
+  description          String
+  category             String // Worship, Youth, Prayer, Bible Study, Conference, Retreat, Outreach, Volunteer, Special Service
+  banner               String? // Banner details
+  venue                String
+  capacity             Int
+  startDate            DateTime
+  endDate              DateTime
+  registrationDeadline DateTime
+  status               String         @default("DRAFT") // DRAFT, OPEN, CLOSED, COMPLETED, CANCELLED
+  ministryId           String?
+  ministry             Ministry?      @relation(fields: [ministryId], references: [id])
+  organizerId          String
+  registrations        Registration[]
+  attendance           Attendance[]
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+}
+
+model Registration {
+  id               String       @id @default(uuid())
+  eventId          String
+  event            Event        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId           String
+  user             User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  registrationType String       @default("INDIVIDUAL") // INDIVIDUAL, FAMILY, GROUP
+  attendeeCount    Int          @default(1)
+  notes            String?
+  status           String       @default("PENDING") // PENDING, CONFIRMED, CANCELLED, ATTENDED, ABSENT
+  registeredAt     DateTime     @default(now())
+  attendance       Attendance?
+}
+
+model Attendance {
+  id               String    @id @default(uuid())
+  registrationId   String    @unique
+  registration     Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  eventId          String
+  event            Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId           String
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  checkInTime      DateTime?
+  attendanceStatus String    @default("ABSENT") // PRESENT, LATE, ABSENT
+  markedById       String?
+  markedBy         String?   // Name of the marker
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String   @default("INFO") // INFO, REMINDER, CANCELLATION, CHECK_IN
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
