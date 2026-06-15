@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { apiRequest, getUser } from '../../utils/api';
+import { apiRequest, getUser, API_BASE_URL } from '../../utils/api';
 import { Html5Qrcode } from 'html5-qrcode';
 import {
   Calendar,
@@ -596,7 +596,7 @@ export default function MinistryLeaderDashboard() {
             </button>
             <div className="flex gap-2">
               <a
-                href={`http://localhost:5000/api/reports/attendance/${selectedEvent.id}/pdf`}
+                href={`${API_BASE_URL}/reports/attendance/${selectedEvent.id}/pdf`}
                 target="_blank"
                 rel="noreferrer"
                 className="py-1.5 px-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold rounded-xl flex items-center gap-1 transition-all shadow-sm"
@@ -604,7 +604,7 @@ export default function MinistryLeaderDashboard() {
                 <FileText className="w-3.5 h-3.5 text-red-500" /> PDF Report
               </a>
               <a
-                href={`http://localhost:5000/api/reports/attendance/${selectedEvent.id}/csv`}
+                href={`${API_BASE_URL}/reports/attendance/${selectedEvent.id}/csv`}
                 target="_blank"
                 rel="noreferrer"
                 className="py-1.5 px-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold rounded-xl flex items-center gap-1 transition-all shadow-sm"
